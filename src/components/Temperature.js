@@ -1,6 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
-export default function Temperature({ temperature, weatherIcon }) {
+export default function Temperature({ temperature, weatherIcon, loading }) {
   const temperatureList = temperature.map((tem) => {
     return [tem.dataTime.slice(11, 13), tem.elementValue[0].value];
   });
@@ -27,7 +29,15 @@ export default function Temperature({ temperature, weatherIcon }) {
 
   return (
     <div className="temp-imform">
-      <ul>
+      {loading && (
+        <Skeleton
+          count={3}
+          duration={2}
+          baseColor="#aaa"
+          highlightColor="#ccc"
+        />
+      )}
+      <ul style={{ display: loading ? "none" : undefined }}>
         {temperatureList.map((element, index) => (
           <li key={index}>
             <p>{element[0]}時</p>

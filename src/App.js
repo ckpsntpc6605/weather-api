@@ -15,9 +15,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 library.add(faCloud, faSun, faCloudSun, faCloudShowersHeavy);
 
-function App() {
-  const url = `http://opendata.cwa.gov.tw/api/v1/rest/datastore/F-D0047-069?Authorization=CWA-AED89E17-921A-41DE-B60A-5F7DDD80184F&format=JSON&locationName=%E9%B6%AF%E6%AD%8C%E5%8D%80
+const url = `http://opendata.cwa.gov.tw/api/v1/rest/datastore/F-D0047-069?Authorization=CWA-AED89E17-921A-41DE-B60A-5F7DDD80184F&format=JSON&locationName=%E9%B6%AF%E6%AD%8C%E5%8D%80
   `;
+
+function App() {
   const [weather, setWeather] = useState({
     locationName: "鶯歌區",
     temperature: null,
@@ -25,7 +26,7 @@ function App() {
     POP6: null,
     AT: null,
   });
-
+  const [loading, setLoading] = useState(true);
   async function getWeather() {
     return await fetch(url)
       .then((res) => {
@@ -34,7 +35,10 @@ function App() {
         }
         return res.json();
       })
-      .then((data) => data.records.locations[0].location[0]);
+      .then((data) => {
+        setLoading(false);
+        return data.records.locations[0].location[0];
+      });
   }
 
   const [temperature, setTemperature] = useState([]);
@@ -82,7 +86,7 @@ function App() {
 
   return (
     <div className="container">
-      <Header weather={weather} />
+      <Header weather={weather} loading={loading} />
       <Routes>
         <Route path="/" element={<Imformation />}>
           <Route index element={<Navigate replace to="temperature" />} />
@@ -92,13 +96,14 @@ function App() {
               <Temperature
                 temperature={temperature}
                 weatherIcon={weatherIcon}
+                loading={loading}
               />
             }
           />
           <Route path="pop" element={<POP pop={pop} />} />
         </Route>
       </Routes>
-      <WeatherDescription description={description} />
+      <WeatherDescription description={description} loading={loading} />
     </div>
   );
 }
