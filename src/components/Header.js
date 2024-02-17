@@ -3,19 +3,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function Header({ weather }) {
   // console.log(weather);
   let weatherIcon;
-  if (weather.currentWeather == "晴") {
+  if (weather.currentWeather === "晴") {
     weatherIcon = "fa-solid fa-sun";
   } else if (
-    weather.currentWeather == "陰" ||
-    weather.currentWeather == "多雲"
+    weather.currentWeather === "陰" ||
+    weather.currentWeather === "多雲"
   ) {
     weatherIcon = "fa-solid fa-cloud";
-  } else if (weather.currentWeather == "晴時多雲") {
+  } else if (weather.currentWeather === "晴時多雲") {
     weatherIcon = "fa-solid fa-cloud-sun";
   } else if (
-    weather.currentWeather == "陣雨" ||
-    weather.currentWeather == "短暫雨" ||
-    weather.currentWeather == "陰時多雲短暫雨"
+    weather.currentWeather === "陣雨" ||
+    weather.currentWeather === "短暫雨" ||
+    weather.currentWeather === "陰時多雲短暫雨"
   ) {
     weatherIcon = "fa-solid fa-cloud-showers-heavy";
   }

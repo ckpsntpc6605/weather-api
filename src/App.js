@@ -4,6 +4,7 @@ import Temperature from "./components/Temperature";
 import POP from "./components/POP";
 import Header from "./components/Header";
 import Imformation from "./components/Imformation";
+import WeatherDescription from "./components/WeatherDescription";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -25,8 +26,8 @@ function App() {
     AT: null,
   });
 
-  function getWeather() {
-    return fetch(url)
+  async function getWeather() {
+    return await fetch(url)
       .then((res) => {
         if (!res.ok) {
           throw new Error("Res is NOT OK!!");
@@ -39,12 +40,13 @@ function App() {
   const [temperature, setTemperature] = useState([]);
   const [weatherIcon, setIcon] = useState([]);
   const [pop, setPop] = useState([]);
+  const [description, setDescription] = useState("");
 
   // index Fetch
   useEffect(() => {
     getWeather()
       .then((weatherData) => {
-        // console.log(weatherData);
+        console.log(weatherData);
         const currentData = (num) => {
           return weatherData.weatherElement[num].time[0].elementValue[0].value;
         };
@@ -59,17 +61,19 @@ function App() {
         });
 
         const temperatureData = weatherData.weatherElement[3].time;
-        setTemperature((prevTemp) => {
-          return prevTemp.concat(temperatureData.slice(0, 6));
-        });
+        setTemperature((prevTemp) =>
+          prevTemp.concat(temperatureData.slice(0, 6))
+        );
 
         const weatherIconData = weatherData.weatherElement[1].time;
-        setIcon((prevIcon) => {
-          return prevIcon.concat(weatherIconData.slice(0, 6));
-        });
+        setIcon((prevIcon) => prevIcon.concat(weatherIconData.slice(0, 6)));
 
         const popData = weatherData.weatherElement[7].time;
         setPop((prevPop) => prevPop.concat(popData.slice(0, 6)));
+
+        const descriptionData =
+          weatherData.weatherElement[6].time[0].elementValue[0].value;
+        setDescription((prevDesc) => `${descriptionData}`);
       })
       .catch((e) => {
         console.log("Error fetching weather data:", e.message);
@@ -94,6 +98,7 @@ function App() {
           <Route path="pop" element={<POP pop={pop} />} />
         </Route>
       </Routes>
+      <WeatherDescription description={description} />
     </div>
   );
 }

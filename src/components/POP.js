@@ -2,7 +2,6 @@ export default function POP({ pop }) {
   const popList = pop.map((popitem) => {
     return [popitem.startTime.slice(11, 13), popitem.elementValue[0].value];
   });
-  console.log(popList);
   return (
     <div className="popList">
       <ul>
